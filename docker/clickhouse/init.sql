@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS dashforge.sensor_readings (
 ENGINE = MergeTree()
 PARTITION BY (tenant_id, toYYYYMM(timestamp))
 ORDER BY (tenant_id, device_id, metric_name, timestamp)
-TTL timestamp + INTERVAL 2 YEAR;
+TTL toDateTime(timestamp) + INTERVAL 2 YEAR;
 
 -- Aggregated metrics (pre-computed for dashboard KPIs)
 CREATE TABLE IF NOT EXISTS dashforge.metrics_hourly (
@@ -68,7 +68,7 @@ CREATE TABLE IF NOT EXISTS dashforge.alerts (
 )
 ENGINE = MergeTree()
 PARTITION BY (tenant_id, toYYYYMM(timestamp))
-ORDER BY (tenant_id, timestamp DESC);
+ORDER BY (tenant_id, timestamp);
 
 -- Sales/revenue data
 CREATE TABLE IF NOT EXISTS dashforge.sales_events (
